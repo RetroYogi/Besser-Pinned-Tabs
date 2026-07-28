@@ -19,6 +19,13 @@ function persistState() {
   chrome.storage.local.set({ pinnedTabs, tabRedirects });
 }
 
+// Clicking the toolbar icon opens the About page. The action declares no default_popup,
+// which is what makes onClicked fire at all; the page itself is registered as the
+// extension's options page so it is also reachable from chrome://extensions.
+chrome.action.onClicked.addListener(() => {
+  chrome.runtime.openOptionsPage();
+});
+
 // Helper function to check if a URL is from a different domain
 function isDifferentDomain(url1, url2) {
   try {

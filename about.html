@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Besser Pinned Tabs</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --text: #1b1b1f;
+    --muted: #45464f;
+    --accent: #0b57d0;
+    --border: #c7c9d1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1b1f;
+      --surface: #26262b;
+      --text: #f2f2f5;
+      --muted: #c9cad2;
+      --accent: #a8c7fa;
+      --border: #4a4b54;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  main { max-width: 60rem; margin: 0 auto; }
+  header { display: flex; align-items: center; gap: 1rem; margin-bottom: .5rem; }
+  header img { width: 64px; height: 64px; }
+  h1 { font-size: 1.75rem; margin: 0; }
+  h2 { font-size: 1.25rem; margin: 2.5rem 0 .75rem; }
+  h3 { font-size: 1rem; margin: 1.5rem 0 .25rem; }
+  p, li { color: var(--muted); }
+  .version { margin: 0; color: var(--muted); font-size: .9rem; }
+  figure { margin: 1.5rem 0; }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  figcaption { margin-top: .5rem; font-size: .9rem; color: var(--muted); }
+  .panels { padding-left: 1.5rem; }
+  .panels > li { margin-bottom: .75rem; }
+  .panels strong { color: var(--text); }
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .note > :first-child { margin-top: 0; }
+  .note > :last-child { margin-bottom: 0; }
+  a { color: var(--accent); }
+  a:focus-visible, :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  footer { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 1rem; font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon128.png" alt="" width="64" height="64">
+    <div>
+      <h1>Besser Pinned Tabs</h1>
+      <p class="version">Chrome extension &mdash; version <span id="version">1.1.0</span></p>
+    </div>
+  </header>
+
+  <p>
+    Besser Pinned Tabs protects your pinned tabs against accidental closure and stops a
+    pinned tab from being replaced by a different website. It runs silently in the
+    background and needs no configuration.
+  </p>
+
+  <h2>What it does</h2>
+
+  <figure>
+    <img src="description.png"
+         alt="Illustrated overview of the five features of Besser Pinned Tabs for Chrome, each of which is also described in the numbered list below this image.">
+    <figcaption>An overview of the extension&rsquo;s behaviour. The same information is written out below.</figcaption>
+  </figure>
+
+  <ol class="panels">
+    <li><strong>Keeps your pinned tabs exactly where you left them.</strong>
+      Your pinned tabs stay at the left of the tab strip, showing the site you pinned.</li>
+    <li><strong>Accidentally closed a pinned tab? It snaps right back.</strong>
+      If a pinned tab is closed &mdash; with Cmd-W, Ctrl-W, the close button or the context
+      menu &mdash; the extension reopens it at the same position with the same address.</li>
+    <li><strong>Click a link to another site &mdash; it opens in a new tab, not over your pinned page.</strong>
+      Links leading to a different domain are opened in a new tab next to the pinned one,
+      so the pinned page stays put.</li>
+    <li><strong>Type a new address in a pinned tab, and it opens in a fresh tab instead.</strong>
+      Entering an address for a different domain in a pinned tab&rsquo;s address bar opens
+      that site in a new tab.</li>
+    <li><strong>No data collection. Open source.</strong>
+      The extension collects, stores and transmits no browsing data. Its full source code
+      is public.</li>
+  </ol>
+
+  <h2>Technical limitations</h2>
+
+  <p>
+    These are consequences of what a Chrome extension is technically allowed to do. They
+    are not bugs, and they cannot be fixed from within the extension.
+  </p>
+
+  <h3>A closed pinned tab is restored, not prevented from closing</h3>
+  <p>
+    Chrome gives extensions no way to veto a tab being closed. What actually happens is
+    that the tab closes and the extension immediately reopens it at the same index with
+    the same address. In practice it looks like the tab never left, but the page is
+    reloaded: scroll position, unsaved form input and other in-page state are lost.
+  </p>
+
+  <h3>Intercepted links can make the pinned page reload</h3>
+  <p>
+    For the same reason, a cross-domain navigation is not blocked before it starts. It is
+    detected as it begins and then reverted, which can cause a brief flash or a reload of
+    the pinned page. This is the trade-off for the extension not requiring permission to
+    read the content of the pages you visit.
+  </p>
+
+  <h3>Internal browser pages are not protected</h3>
+  <p>
+    Navigation on Chrome&rsquo;s own pages (<code>chrome://</code>, <code>about:</code>
+    and similar) is not intercepted, and neither is a window that starts up with a pinned
+    tab on such a page. This is deliberate: covering them would require broader
+    permissions than the extension asks for.
+  </p>
+
+  <h3>Only cross-domain navigation is intercepted</h3>
+  <p>
+    Links that stay on the same domain load inside the pinned tab, as they normally would.
+    Clicks on the browser&rsquo;s Home button are not intercepted either, because Chrome
+    does not report them as a navigation the extension can act on.
+  </p>
+
+  <h3>Repeated redirects are allowed through</h3>
+  <p>
+    Some sites redirect through another domain, typically for sign-in. To avoid opening an
+    endless series of new tabs, the second attempt to reach the same domain in a given tab
+    is allowed to proceed in the pinned tab.
+  </p>
+
+  <div class="note">
+    <p>
+      <strong>Other Chromium-based browsers.</strong> This extension is developed and
+      tested for Google Chrome. Third-party browsers built on Chromium (Brave, Vivaldi,
+      Helium, and others) implement tab and navigation behaviour in their own way, so the
+      extension may behave differently there. Problems that occur only in one of those
+      browsers are best reported to that browser&rsquo;s own community &mdash; they cannot
+      be resolved from the extension&rsquo;s side.
+    </p>
+  </div>
+
+  <h2>Privacy</h2>
+  <p>
+    Besser Pinned Tabs collects no data whatsoever. Nothing is sent anywhere. The only
+    thing it stores is a local list of your pinned tabs&rsquo; addresses and positions,
+    kept in the browser so the extension keeps working after Chrome suspends it in the
+    background.
+  </p>
+
+  <footer>
+    <p>
+      Free and open source software.
+      Source code and issue tracker:
+      <a href="https://github.com/gerardkieffer/Besser-Pinned-Tabs-Chrome">github.com/gerardkieffer/Besser-Pinned-Tabs-Chrome</a>
+    </p>
+  </footer>
+</main>
+<script src="about.js"></script>
+</body>
+</html>
