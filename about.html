@@ -78,7 +78,7 @@
     <img src="icon128.png" alt="" width="64" height="64">
     <div>
       <h1>Besser Pinned Tabs</h1>
-      <p class="version">Chrome extension &mdash; version <span id="version">1.1.0</span></p>
+      <p class="version">Chrome extension &mdash; version <span id="version">1.1.4</span></p>
     </div>
   </header>
 
@@ -91,7 +91,7 @@
   <h2>What it does</h2>
 
   <figure>
-    <img src="description.png"
+    <img src="description.webp"
          alt="Illustrated overview of the five features of Besser Pinned Tabs for Chrome, each of which is also described in the numbered list below this image.">
     <figcaption>An overview of the extension&rsquo;s behaviour. The same information is written out below.</figcaption>
   </figure>
@@ -101,31 +101,50 @@
       Your pinned tabs stay at the left of the tab strip, showing the site you pinned.</li>
     <li><strong>Accidentally closed a pinned tab? It snaps right back.</strong>
       If a pinned tab is closed &mdash; with Cmd-W, Ctrl-W, the close button or the context
-      menu &mdash; the extension reopens it at the same position with the same address.</li>
+      menu &mdash; the extension reopens it at the same position, showing the same site.
+      The page reloads when this happens. On current versions of Google Chrome this is
+      switched off, because Chrome now asks you to press the shortcut a second time before
+      it closes a pinned tab, which protects the tab better than reopening it can.</li>
     <li><strong>Click a link to another site &mdash; it opens in a new tab, not over your pinned page.</strong>
       Links leading to a different domain are opened in a new tab next to the pinned one,
       so the pinned page stays put.</li>
     <li><strong>Type a new address in a pinned tab, and it opens in a fresh tab instead.</strong>
       Entering an address for a different domain in a pinned tab&rsquo;s address bar opens
-      that site in a new tab.</li>
+      that site in a new tab. The pinned page reloads as it is put back.</li>
     <li><strong>No data collection. Open source.</strong>
       The extension collects, stores and transmits no browsing data. Its full source code
       is public.</li>
   </ol>
 
+  <div class="note">
+    <p>
+      <strong>The pinned page always reloads in two cases:</strong> when you type a new
+      address in a pinned tab, and when you close a pinned tab with a keyboard shortcut.
+      In both, the tab is put back rather than held in place, so the page loads again and
+      anything unsaved on it &mdash; scroll position, half-filled forms &mdash; is lost.
+    </p>
+  </div>
+
   <h2>Technical limitations</h2>
 
   <p>
-    These are consequences of what a Chrome extension is technically allowed to do. They
+    These are consequences of what a browser extension is technically allowed to do. They
     are not bugs, and they cannot be fixed from within the extension.
   </p>
 
   <h3>A closed pinned tab is restored, not prevented from closing</h3>
   <p>
-    Chrome gives extensions no way to veto a tab being closed. What actually happens is
-    that the tab closes and the extension immediately reopens it at the same index with
-    the same address. In practice it looks like the tab never left, but the page is
-    reloaded: scroll position, unsaved form input and other in-page state are lost.
+    The browser gives extensions no way to veto a tab being closed. What actually happens
+    is that the tab closes and the extension immediately reopens it at the same index,
+    showing the same site. In practice it looks like the tab never left, but the page is
+    reloaded.
+  </p>
+  <p>
+    Google Chrome now handles this case itself, asking you to press Cmd-W or Ctrl-W a
+    second time before it closes a pinned tab. That is a real prevention rather than a
+    repair, so on Chrome the extension stays out of the way and leaves the tab closed once
+    you have confirmed. On Brave, Edge and other Chromium browsers, which still close a
+    pinned tab on the first press, the extension reopens it as described above.
   </p>
 
   <h3>Intercepted links can make the pinned page reload</h3>
@@ -161,20 +180,26 @@
   <div class="note">
     <p>
       <strong>Other Chromium-based browsers.</strong> This extension is developed and
-      tested for Google Chrome. Third-party browsers built on Chromium (Brave, Vivaldi,
-      Helium, and others) implement tab and navigation behaviour in their own way, so the
-      extension may behave differently there. Problems that occur only in one of those
-      browsers are best reported to that browser&rsquo;s own community &mdash; they cannot
-      be resolved from the extension&rsquo;s side.
+      tested for Google Chrome, Brave and Microsoft Edge. Other browsers built on Chromium
+      (Vivaldi, Helium, and others) implement tab and navigation behaviour in their own
+      way, so it may behave differently there. Problems that occur only in one of those
+      browsers are best reported to that browser&rsquo;s own community &mdash; they often
+      cannot be resolved from the extension&rsquo;s side.
     </p>
   </div>
 
   <h2>Privacy</h2>
   <p>
-    Besser Pinned Tabs collects no data whatsoever. Nothing is sent anywhere. The only
-    thing it stores is a local list of your pinned tabs&rsquo; addresses and positions,
-    kept in the browser so the extension keeps working after Chrome suspends it in the
-    background.
+    Besser Pinned Tabs collects no data whatsoever. Nothing is sent anywhere, and the
+    extension has no permission to read the content of the pages you visit.
+  </p>
+  <p>
+    It stores one thing locally: a list of your pinned tabs&rsquo; addresses and positions,
+    kept in the browser so the extension keeps working after the browser suspends it in the
+    background. To put a closed pinned tab back exactly as it was, it also reads the
+    browser&rsquo;s own record of the tab you just closed &mdash; the same list behind
+    &ldquo;Reopen closed tab&rdquo;. That record is only ever read at the moment a tab
+    closes, and never leaves your computer.
   </p>
 
   <footer>
